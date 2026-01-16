@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+    <div id="auth-overlay" class="auth-wrapper">
+        <div class="auth-card">
+            <div class="logo-area">
+                <i class="ri-graduation-cap-fill"></i>
+            </div>
+            <h2>Student Portal</h2>
+            <p>Sign in to access your academic records</p>
+            
+            <div class="input-group-auth">
+                <i class="ri-mail-line"></i>
+                <input type="email" id="email" placeholder="student@college.edu">
+            </div>
+            <div class="input-group-auth">
+                <i class="ri-lock-password-line"></i>
+                <input type="password" id="password" placeholder="Password">
+            </div>
+
+            <div style="text-align: right; margin-bottom: 15px;">
+                <span onclick="handleForgotPassword()" style="color: var(--primary); cursor: pointer; font-size: 0.9rem; font-weight: 600;">
+                    Forgot Password?
+                </span>
+            </div>
+
+            <button class="btn-primary full-width" onclick="handleAuthAction()">
+                <span id="auth-btn-text">Secure Login</span>
+            </button>
+            
+            <p class="switch-auth" onclick="toggleAuthMode()">
+                <span id="auth-toggle-msg">New User? Create Account</span>
+            </p>
+            <p id="auth-message" class="error-text" style="color: #ef4444; margin-top: 10px; font-weight: 600;"></p>
+        </div>
+    </div>
+    <div id="reset-overlay" class="auth-wrapper" style="display: none;">
+        <div class="auth-card">
+            <div class="logo-area">
+                <i class="ri-key-2-fill"></i>
+            </div>
+            <h2>Reset Password</h2>
+            <p>Enter your new password below.</p>
+            
+            <div class="input-group-auth">
+                <i class="ri-lock-password-fill"></i>
+                <input type="password" id="new-password-input" placeholder="New Password">
+            </div>
+
+            <button class="btn-primary full-width" onclick="finalizePasswordReset()">
+                Update Password
+            </button>
+        </div>
+    </div>
+
+    <div class="app-layout">
+        
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="ri-book-mark-fill"></i> EduTrack
+            </div>
+
+            <nav class="menu">
+                <div class="menu-item active" onclick="showSection('dashboard', this)">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </div>
+                <div class="menu-item" onclick="showSection('gpa-calc', this)">
+                    <i class="ri-calculator-line"></i> GPA Calculation
+                </div>
+                <div class="menu-item" onclick="showSection('cgpa-calc', this)">
+                    <i class="ri-line-chart-line"></i> CGPA Calculation
+                </div>
+                <div class="menu-item" onclick="showSection('backlogs', this)">
+                    <i class="ri-error-warning-line"></i> Backlogs Info
+                </div>
+                <div class="menu-item" onclick="showSection('target', this)">
+                    <i class="ri-crosshair-2-line"></i> Target SGPA
+                </div>
+                <div class="menu-item" onclick="showSection('attendance', this)">
+                    <i class="ri-pie-chart-line"></i> Attendance Tracker
+                </div>
+                <div class="menu-item" onclick="showSection('export', this)">
+                    <i class="ri-file-download-line"></i> Export Info
+                </div>
+                <div class="menu-item" onclick="showSection('resume', this)">
+                    <i class="ri-file-user-line"></i> Resume Builder
+                </div>
+                <div class="menu-item" onclick="showSection('deadlines', this)">
+    <i class="ri-timer-flash-line"></i> Deadline Tracker
+</div>
+                <div class="menu-item" onclick="showSection('profile', this)">
+                    <i class="ri-user-settings-line"></i> Profile
+                </div>
+            </nav>
+
+            <div class="logout-area">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="ri-logout-circle-line"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header>
+                <div>
+                    <h1 id="page-title">Dashboard Overview</h1>
+                    <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 5px;">Welcome back to your portal</p>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                        <i class="ri-moon-line"></i>
+                    </button>
+                    <div class="user-pill">
+                        <i class="ri-account-circle-fill"></i>
+                        <span>Student Account</span>
+                    </div>
+                </div>
+            </header>
+
+            <section id="dashboard" class="view active">
+                <div class="stats-row">
+                    <div class="card stat">
+                        <div class="icon purple">
+                            <i class="ri-graduation-cap-line"></i>
+                        </div>
+                        <div>
+                            <h3>Current CGPA</h3>
+                            <h1 id="dash-cgpa">0.00</h1>
+                        </div>
+                    </div>
+
+                    <div class="card stat">
+                        <div class="icon blue"> <i class="ri-calculator-line"></i>
+                        </div>
+                        <div>
+                            <h3>Current GPA</h3>
+                            <h1 id="dash-gpa">0.00</h1>
+                        </div>
+                    </div>
+
+                    <div class="card stat">
+                        <div class="icon orange">
+                            <i class="ri-fire-line"></i>
+                        </div>
+                        <div>
+                            <h3>Active Backlogs</h3>
+                            <h1 id="dash-backlogs">0</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card chart-card">
+                    <h3>Performance Analysis</h3>
+                    <canvas id="cgpaChart"></canvas>
+                </div>
+            </section>
+
+            <section id="gpa-calc" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Semester Calculator</h3>
+                    </div>
+                    <div id="subject-rows" class="rows-area"></div>
+                    <div class="btn-row">
+                        <button class="btn-outline" onclick="addSubjectRow()">+ Add Subject</button>
+                        <button class="btn-primary" onclick="calculateGPA()">Calculate GPA</button>
+                    </div>
+                    <div id="gpa-result-box" class="result-popup">
+                        <p>Your Semester GPA</p>
+                        <h2 id="gpa-score">0.00</h2>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cgpa-calc" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Overall CGPA</h3>
+                    </div>
+                    <div id="semester-rows" class="rows-area"></div>
+                    <div class="btn-row">
+                        <button class="btn-outline" onclick="addSemesterRow()">+ Add Semester</button>
+                        <button class="btn-primary" onclick="calcCGPA()">Calculate CGPA</button>
+                    </div>
+                    <div id="cgpa-result-box" class="result-popup">
+                        <p style="color: #4f46e5; font-weight: 700; letter-spacing: 1px;">Cumulative CGPA</p>
+                        <h2 id="cgpa-score" style="color: #312e81; font-size: 3.5rem; margin: 10px 0;">0.00</h2>
+                    </div>
+                </div>
+            </section>
+
+            <section id="backlogs" class="view">
+                <div class="card">
+                    <h3>Backlogs Information</h3>
+                    <p class="subtitle" style="margin-bottom: 25px;">Track your pending subjects here.</p>
+                    
+                    <div class="input-row">
+                        <input type="text" id="bl-subject" placeholder="Subject Name">
+                        <input type="text" id="bl-sem" placeholder="Sem (e.g. 3)">
+                    </div>
+                    
+                    <button class="btn-primary" onclick="addBacklog()" style="width: auto; padding: 12px 30px;">Add Backlog</button>
+
+                    <ul id="backlog-list" class="simple-list" style="margin-top: 30px;"></ul>
+                </div>
+            </section>
+
+            <section id="target" class="view">
+                <div class="card">
+                    <h3>Target SGPA Predictor</h3>
+                    <p class="subtitle" style="margin-bottom: 30px;">Calculate the score needed to reach your goal.</p>
+                    
+                    <div class="form-grid">
+                        <div>
+                            <label style="display:block; margin-bottom:8px; color:var(--text-muted); font-size:0.9rem;">Current CGPA</label>
+                            <input type="number" id="cur-cgpa" placeholder="e.g. 7.5">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:8px; color:var(--text-muted); font-size:0.9rem;">Credits Completed</label>
+                            <input type="number" id="cur-credits" placeholder="e.g. 60">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:8px; color:var(--text-muted); font-size:0.9rem;">Target CGPA</label>
+                            <input type="number" id="target-cgpa" placeholder="e.g. 8.0">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:8px; color:var(--text-muted); font-size:0.9rem;">Next Sem Credits</label>
+                            <input type="number" id="next-credits" placeholder="e.g. 24">
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary full-width" onclick="calculateTarget()">Predict Required SGPA</button>
+                    
+                    <div id="target-result-box" class="result-popup">
+                        <p style="color: #4f46e5; font-weight: 700;">Required SGPA</p>
+                        <h2 id="target-result-val" style="color: #312e81;">0.00</h2>
+                    </div>
+                </div>
+            </section>
+
+            <section id="attendance" class="view">
+                <div class="card">
+                    <h3>Attendance Manager</h3>
+                    <p class="subtitle" style="margin-bottom: 25px;">Minimum requirement: <strong>80%</strong></p>
+                    
+                    <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr; margin-bottom: 15px;">
+                        <div>
+                            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">Subject Name</label>
+                            <input type="text" id="att-subject" placeholder="e.g. Data Structures">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">Total Classes</label>
+                            <input type="number" id="att-total" placeholder="e.g. 40">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">Attended</label>
+                            <input type="number" id="att-present" placeholder="e.g. 35">
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="addAttendance()" style="width: auto; padding: 12px 30px;">Track Subject</button>
+                </div>
+
+                <div id="attendance-grid" class="attendance-grid">
+                    </div>
+            </section>
+
+            <section id="export" class="view">
+                <div class="card center-content" style="text-align: center;">
+                    <div class="icon big blue" style="margin: 0 auto 20px;"><i class="ri-file-download-fill"></i></div>
+                    <h3>Export Academic Report</h3>
+                    <p style="margin-bottom: 20px;">Download a PDF summary of your CGPA, GPA, and Backlogs.</p>
+                    <button class="btn-primary" onclick="downloadPDF()">Download PDF Report</button>
+                </div>
+            </section>
+
+            <section id="resume" class="view">
+                <div class="card">
+                    <h3>Professional Resume Builder</h3>
+                    <p class="subtitle" style="margin-bottom: 25px;">Create a tailored, industry-standard resume.</p>
+                    
+                    <div class="form-grid">
+                        <div>
+                            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">Email</label>
+                            <input type="email" id="res-email" placeholder="you@example.com">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">Phone Number</label>
+                            <input type="text" id="res-phone" placeholder="+91 98765 43210">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">LinkedIn URL</label>
+                            <input type="text" id="res-linkedin" placeholder="linkedin.com/in/name">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px; color:var(--text-muted);">GitHub/Portfolio URL</label>
+                            <input type="text" id="res-github" placeholder="github.com/name">
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <label style="display:block; margin-bottom:8px; font-weight:600;">Technical Skills</label>
+                        <textarea id="res-skills" rows="2" placeholder="Languages: Java, Python... | Tools: VS Code, Git..."></textarea>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <label style="font-weight:600;">Projects</label>
+                            <button class="btn-outline" onclick="addResumeProject()" style="padding: 5px 15px; font-size: 0.9rem;">+ Add Project</button>
+                        </div>
+                        <div id="res-projects-list">
+                            </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <label style="font-weight:600;">Experience / Internships</label>
+                            <button class="btn-outline" onclick="addResumeExp()" style="padding: 5px 15px; font-size: 0.9rem;">+ Add Experience</button>
+                        </div>
+                        <div id="res-exp-list">
+                            </div>
+                    </div>
+
+                    <div class="form-grid" style="margin-top: 20px;">
+                        <div>
+                            <label style="display:block; margin-bottom:8px; font-weight:600;">Certifications</label>
+                            <textarea id="res-certs" rows="3" placeholder="AWS Certified Cloud Practitioner, Oracle Java SE..."></textarea>
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:8px; font-weight:600;">Interests / Hobbies</label>
+                            <textarea id="res-hobbies" rows="3" placeholder="Chess, Cricket, Open Source Contributing, Blogging..."></textarea>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="generateResume()" style="margin-top: 30px; width: 100%; font-size: 1.2rem;">
+                        <i class="ri-file-pdf-line"></i> Generate Professional Resume
+                    </button>
+                </div>
+            </section>
+
+            <section id="deadlines" class="view">
+    <div class="card">
+        <h3>Exam & Assignment Tracker</h3>
+        <p class="subtitle" style="margin-bottom: 25px;">Never miss a submission date.</p>
+        
+        <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr; margin-bottom:15px;">
+            <div>
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Title</label>
+                <input type="text" id="task-title" placeholder="e.g. AI Model Submission">
+            </div>
+            <div>
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Date</label>
+                <input type="date" id="task-date">
+            </div>
+            <div>
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Type</label>
+                <select id="task-type">
+                    <option value="Assignment">Assignment</option>
+                    <option value="Exam">Exam/Test</option>
+                    <option value="Project">Project</option>
+                </select>
+            </div>
+        </div>
+        
+        <button class="btn-primary" onclick="addDeadline()" style="width: auto;">+ Add Deadline</button>
+    </div>
+
+    <div id="deadline-list" style="margin-top: 25px;">
+        </div>
+</section>
+
+            <section id="profile" class="view">
+                <div class="card">
+                    <h3>Student Profile</h3>
+                    <div class="form-grid">
+                        <div>
+                            <label style="display:block; margin-bottom:5px;">Full Name</label>
+                            <input type="text" id="p-name">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px;">Register No</label>
+                            <input type="text" id="p-reg">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px;">Department</label>
+                            <input type="text" id="p-dept">
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:5px;">College</label>
+                            <input type="text" id="p-coll">
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="saveProfile()" style="margin-top:20px;">Save Profile</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
