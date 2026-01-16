@@ -16,7 +16,7 @@ body.dark-mode {
     --bg-body: #0f172a;
     --sidebar-bg: #1e293b;
     --card-bg: #1e293b;
-    --text-main: #f9fafb;
+    --text-main: #f9fafb;   
     --text-muted: #9ca3af;
     --border: #334155;
 }
@@ -68,13 +68,13 @@ body {
 .sidebar {
     width: 280px;
     height: 100vh;
+    padding: 20px;
     background: var(--sidebar-bg);
     border-right: 1px solid var(--border);
-
-    padding: 20px 18px;  /* ✅ reduced padding */
+    
     display: flex;
     flex-direction: column;
-    overflow: hidden;    /* ✅ no scrolling */
+    overflow: hidden;   
 }
 
 .brand {
@@ -83,19 +83,25 @@ body {
 }
 
 .menu {
+    flex:1;
     display: flex;
     flex-direction: column;
-    gap: 8px;            /* ✅ reduced */
-    flex: 1;
-    overflow: hidden;    /* ✅ no scroll */
+    gap: 6px;
+    overflow:hidden;
 }
 
 .menu-item {
-    padding: 12px 16px;  /* ✅ reduced */
-    border-radius: 14px;
-    font-size: 1rem;     /* ✅ reduced */
+    height: 48px;
+    padding:0 16px;
+    border-radius:14px;
+    display:flex;
+    align-items: center;
     gap: 12px;
-    white-space: nowrap; /* ✅ no text wrap */
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .menu-item i {
