@@ -36,7 +36,7 @@ To run this project locally, follow these steps:
 
 1.  **Clone the Repository**
     ```bash
-    git clone [https://github.com/yourusername/EduTrack.git](https://github.com/yourusername/EduTrack.git)
+    git clone https://github.com/sanjay-arr/EduTrack--A-Student-Management-Website
     cd EduTrack
     ```
 
