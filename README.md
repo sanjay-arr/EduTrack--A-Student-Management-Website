@@ -11,7 +11,7 @@ It features a **Hybrid Data Architecture**: personal data (like detailed marks) 
 * **Visual Dashboard:** Real-time Chart.js graphs visualizing your academic performance curve.
 
 ### 🧠 Smart Tools
-* **Smart Attendance Tracker:** * Visualizes attendance percentage.
+* **Smart Attendance Tracker:**  Visualizes attendance percentage.
     * **"Bunk" Calculator:** Tells you exactly how many classes you can skip while staying above 80%, or how many you *must* attend to recover.
 * **Live Deadline Tracker:** Real-time countdown timers (Days/Hours/Mins) for assignments and exams.
     * *Visual Urgency:* Cards turn red when less than 3 days remain.
