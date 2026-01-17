@@ -428,3 +428,21 @@ textarea:focus {
 .sidebar{
     flex-shrink: 0;
 }
+
+.copyright-footer {
+    position: fixed;
+    bottom: 10px;        /* 10px from the bottom */
+    right: 10px;         /* 10px from the right */
+    width: auto;         /* Only as wide as the text needs to be */
+    
+    background-color: #ffffff; /* White background to stand out */
+    padding: 5px 15px;   /* Smaller padding inside the box */
+    border-radius: 20px; /* Makes the edges very round (pill shape) */
+    
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Adds a subtle shadow */
+    border: 1px solid #e0e0e0;
+    
+    z-index: 1000;
+    color: #6c757d;
+    font-size: 12px;     /* Slightly smaller text */
+}
