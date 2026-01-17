@@ -1,12 +1,7 @@
 # 🎓 EduTrack - Student Academic Management System
 
 **EduTrack** is a comprehensive academic dashboard designed to help college students track their grades, manage attendance, meet deadlines, and build professional resumes. 
-
 It features a **Hybrid Data Architecture**: personal data (like detailed marks) is stored locally for privacy, while cloud-sync features (Attendance, Deadlines) are powered by **Supabase** to allow access across devices.
-
-🔗 **Live Demo:** [https://edutrack-chi.vercel.app/](https://edutrack-chi.vercel.app/)
-
-![EduTrack Dashboard](https://via.placeholder.com/1000x500?text=EduTrack+Dashboard+Preview)
 
 ## 🚀 Key Features
 
